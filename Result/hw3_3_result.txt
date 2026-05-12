@@ -1,0 +1,24 @@
+PS C:\Users\user\Downloads\DRL_HW3-main\DRL_HW3-main> & C:/Users/user/AppData/Local/Programs/Python/Python313/python.exe c:/Users/user/Downloads/DRL_HW3-main/DRL_HW3-main/HW3_Solutions/hw3_3_advanced_random.py
+Starting Advanced DQN Training (Random Mode) using PyTorch Lightning...
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.  
+┏━━┳━━━━━━━━━━━━━━┳━┳━━┳━┳━━┓
+┃  ┃ Name         ┃ ┃  ┃ ┃  ┃
+┡━━╇━━━━━━━━━━━━━━╇━╇━━╇━╇━━┩
+│  │ model        │ │  │ │  │
+│  │ target_model │ │  │ │  │
+│  │ loss_fn      │ │  │ │  │
+└──┴──────────────┴─┴──┴─┴──┘
+Trainable params: 82.3 K    
+Non-trainable params: 0      
+Total params: 82.3 K
+Total estimated model params 
+taloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+Epoch 37/99 ━━ 4/4 0… 10… wi…                                                                                           
+                   •      0.…                                                                                           
+                   0…
+Saving model to HW3_Solutions/hw3_3_model.pth...
+
+Testing on 100 Random Maps...
+Win Rate: 5.00%

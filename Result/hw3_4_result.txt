@@ -1,0 +1,24 @@
+PS C:\Users\user\Downloads\DRL_HW3-main\DRL_HW3-main> & C:/Users/user/AppData/Local/Programs/Python/Python313/python.exe c:/Users/user/Downloads/DRL_HW3-main/DRL_HW3-main/HW3_Solutions/hw3_4_rainbow_dqn.py
+Starting Rainbow DQN Training (Random Mode) using PyTorch Lightning...
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+┏━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name         ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model        │ RainbowDQN │ 75.9 K │ train │     0 │
+│ 1 │ target_model │ RainbowDQN │ 75.9 K │ train │     0 │
+└───┴──────────────┴────────────┴────────┴───────┴───────┘
+Trainable params: 151 K
+Non-trainable params: 0
+Total params: 151 K
+Total estimated model params size (MB): 0
+Modules in train mode: 26
+Modules in eval mode: 0
+Total FLOPs: 0
+C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+Epoch 53/99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4/4 0:00:00 • 0:00:00 71.96it/s win_rate: 0.156
+Saving Rainbow model to HW3_Solutions/hw3_4_model.pth...
+
+Testing Rainbow DQN on 100 Random Maps...
+Win Rate: 13.00%

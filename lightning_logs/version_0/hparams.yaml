@@ -1,0 +1,4 @@
+batch_size: 64
+gamma: 0.9
+lr: 0.001
+mem_size: 2000
