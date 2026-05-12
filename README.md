@@ -1,4 +1,4 @@
-# HW3 綜合總結報告 (HW3_Comprehensive_Report)
+# HW3 DQN 總結報告
 
 ## HW3-1: Naive DQN for static mode
 
