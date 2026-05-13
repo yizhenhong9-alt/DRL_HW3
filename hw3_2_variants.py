@@ -7,6 +7,7 @@ from collections import deque
 import sys
 import os
 import copy
+import matplotlib.pyplot as plt
 
 # Add Chapter 3 to sys.path to import Gridworld
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), 'DeepReinforcementLearningInAction', 'Chapter 3')))
@@ -187,8 +188,25 @@ def compare_variants():
     
     print("\nComparison Results (Win Rate per 100 epochs):")
     print("Epochs\tBasic\tDouble\tDueling+Double")
+    epochs_axis = [(i+1)*100 for i in range(len(basic_wins))]
     for i in range(len(basic_wins)):
-        print(f"{(i+1)*100}\t{basic_wins[i]:.2f}\t{double_wins[i]:.2f}\t{dueling_wins[i]:.2f}")
+        print(f"{epochs_axis[i]}\t{basic_wins[i]:.2f}\t{double_wins[i]:.2f}\t{dueling_wins[i]:.2f}")
+
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs_axis, basic_wins, label='Basic DQN', marker='o')
+    plt.plot(epochs_axis, double_wins, label='Double DQN', marker='s')
+    plt.plot(epochs_axis, dueling_wins, label='Dueling + Double DQN', marker='^')
+    
+    plt.title('Win Rate Comparison: DQN Variants (Player Mode)')
+    plt.xlabel('Epochs')
+    plt.ylabel('Win Rate (Last 100 Episodes)')
+    plt.legend()
+    plt.grid(True)
+    plt.ylim(0, 1.1)
+    plt.savefig('hw3_2_learning_curve.png')
+    plt.close()
+    print("\nSaved hw3_2_learning_curve.png")
 
 if __name__ == "__main__":
     compare_variants()

@@ -11,6 +11,7 @@ import math
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping
 from torch.utils.data import DataLoader, Dataset
+import matplotlib.pyplot as plt
 
 # Add Chapter 3 to sys.path to import Gridworld
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), 'DeepReinforcementLearningInAction', 'Chapter 3')))
@@ -279,6 +280,38 @@ def train_rainbow():
     torch.save(model.model.state_dict(), 'hw3_4_model.pth')
     
     test_results = test_random(model.model)
+    
+    # Plotting comparison bar chart
+    methods = ['Advanced DQN (HW3-3)', 'Rainbow DQN (HW3-4)']
+    
+    # Try to read HW3-3 win rate from file, otherwise use default
+    hw3_3_win_rate = 0.05
+    if os.path.exists('hw3_3_win_rate.txt'):
+        with open('hw3_3_win_rate.txt', 'r') as f:
+            try:
+                hw3_3_win_rate = float(f.read())
+            except:
+                pass
+
+    win_rates = [hw3_3_win_rate, test_results] 
+    
+    plt.figure(figsize=(8, 6))
+    bars = plt.bar(methods, win_rates, color=['#3498db', '#e74c3c'])
+    
+    plt.title('Win Rate Comparison in Random Mode')
+    plt.ylabel('Win Rate')
+    plt.ylim(0, max(win_rates) * 1.5) # Leave space for labels
+    
+    # Add percentage labels on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., height + 0.005,
+                 f'{height:.2%}', ha='center', va='bottom', fontsize=12, fontweight='bold')
+
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.savefig('hw3_4_comparison_bar.png')
+    plt.close()
+    print("Saved hw3_4_comparison_bar.png")
 
 def test_random(model):
     print("\nTesting Rainbow DQN on 100 Random Maps...")

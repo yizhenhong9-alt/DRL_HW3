@@ -1,24 +1,26 @@
-PS C:\Users\user\Downloads\DRL_HW3-main\DRL_HW3-main> & C:/Users/user/AppData/Local/Programs/Python/Python313/python.exe c:/Users/user/Downloads/DRL_HW3-main/DRL_HW3-main/HW3_Solutions/hw3_3_advanced_random.py
+PS C:\Users\user\Desktop\DRL_HW3> python .\hw3_3_advanced_random.py
 Starting Advanced DQN Training (Random Mode) using PyTorch Lightning...
 GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
-💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.  
-┏━━┳━━━━━━━━━━━━━━┳━┳━━┳━┳━━┓
-┃  ┃ Name         ┃ ┃  ┃ ┃  ┃
-┡━━╇━━━━━━━━━━━━━━╇━╇━━╇━╇━━┩
-│  │ model        │ │  │ │  │
-│  │ target_model │ │  │ │  │
-│  │ loss_fn      │ │  │ │  │
-└──┴──────────────┴─┴──┴─┴──┘
-Trainable params: 82.3 K    
-Non-trainable params: 0      
-Total params: 82.3 K
-Total estimated model params 
-taloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
-Epoch 37/99 ━━ 4/4 0… 10… wi…                                                                                           
-                   •      0.…                                                                                           
-                   0…
-Saving model to HW3_Solutions/hw3_3_model.pth...
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+
+  | Name         | Type         | Params | Mode  | FLOPs
+--------------------------------------------------------------
+0 | model        | DuelingDQNBN | 41.2 K | train | 0
+1 | target_model | DuelingDQNBN | 41.2 K | train | 0
+2 | loss_fn      | MSELoss      | 0      | train | 0
+--------------------------------------------------------------
+82.3 K    Trainable params
+0         Non-trainable params
+82.3 K    Total params
+0.329     Total estimated model params size (MB)
+31        Modules in train mode
+0         Modules in eval mode
+0         Total Flops
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\utilities\_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=27` in the `DataLoader` to improve performance.
+Epoch 38: 100%|███████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 117.46it/s, train_loss=11.50, win_rate=0.393]
+Saving model to hw3_3_model.pth...
 
 Testing on 100 Random Maps...
-Win Rate: 5.00%
+Win Rate: 9.00%

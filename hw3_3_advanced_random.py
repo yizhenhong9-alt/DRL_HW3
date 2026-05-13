@@ -10,6 +10,7 @@ import copy
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping
 from torch.utils.data import DataLoader, Dataset
+import matplotlib.pyplot as plt
 
 # Add Chapter 3 to sys.path to import Gridworld
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), 'DeepReinforcementLearningInAction', 'Chapter 3')))
@@ -78,13 +79,16 @@ class DQNLightning(pl.LightningModule):
         self.total_wins = 0
         self.games_played = 0
         
+        self.loss_history = []
+        self.lr_history = []
+        
         self.loss_fn = nn.MSELoss()
         
     def forward(self, x):
         return self.model(x)
     
     def select_action(self, state):
-        if self.trainer.training and random.random() < self.epsilon:
+        if self.trainer is not None and self.trainer.training and random.random() < self.epsilon:
             return random.randint(0, 3)
         else:
             with torch.no_grad():
@@ -112,8 +116,12 @@ class DQNLightning(pl.LightningModule):
         X = Q1.gather(1, a.unsqueeze(1)).squeeze()
         
         loss = self.loss_fn(X, targets)
-        self.log('train_loss', loss)
+        self.log('train_loss', loss, prog_bar=True)
         self.log('win_rate', (self.total_wins/self.games_played) if self.games_played > 0 else 0.0, prog_bar=True)
+        
+        self.loss_history.append(loss.item())
+        opt = self.optimizers()
+        self.lr_history.append(opt.param_groups[0]['lr'])
         
         if self.global_step % 200 == 0:
             self.target_model.load_state_dict(self.model.state_dict())
@@ -174,7 +182,36 @@ def train_advanced():
     print("Saving model to hw3_3_model.pth...")
     torch.save(model.model.state_dict(), 'hw3_3_model.pth')
     
-    test_random(model.model)
+    final_win_rate = test_random(model.model)
+    
+    # Save win rate for HW3-4 comparison
+    with open('hw3_3_win_rate.txt', 'w') as f:
+        f.write(str(final_win_rate))
+    
+    # Plotting
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+
+    color = 'tab:red'
+    ax1.set_xlabel('Steps')
+    ax1.set_ylabel('Training Loss', color=color)
+    ax1.plot(model.loss_history, color=color, alpha=0.3, label='Loss')
+    # Add moving average for loss
+    if len(model.loss_history) > 10:
+        ma = np.convolve(model.loss_history, np.ones(10)/10, mode='valid')
+        ax1.plot(range(9, len(model.loss_history)), ma, color='darkred', lw=2, label='Loss (MA 10)')
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    ax2 = ax1.twinx()
+    color = 'tab:blue'
+    ax2.set_ylabel('Learning Rate', color=color)
+    ax2.plot(model.lr_history, color=color, lw=2, label='Learning Rate')
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    plt.title('HW3-3: Training Loss & Learning Rate Curve')
+    fig.tight_layout()
+    plt.savefig('hw3_3_training_curves.png')
+    plt.close()
+    print("Saved hw3_3_training_curves.png")
 
 def test_random(model):
     print("\nTesting on 100 Random Maps...")
@@ -195,7 +232,9 @@ def test_random(model):
                 if game.reward() > 0: wins += 1
                 break
             mov += 1
-    print(f"Win Rate: {wins/100:.2%}")
+    win_rate = wins / 100.0
+    print(f"Win Rate: {win_rate:.2%}")
+    return win_rate
 
 if __name__ == "__main__":
     train_advanced()

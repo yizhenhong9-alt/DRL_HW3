@@ -13,9 +13,16 @@ $$Target Q = r + \gamma \max_{a'} Q(s', a')$$
 ### AI 協作討論聲明
 使用了 AI 輔助釐清上述觀念並成功完成實作。
 
+### 視覺化分析
+![Epsilon Decay Curve](hw3_1_epsilon_decay.png)
+*圖 1: Epsilon 衰減曲線，展現 Agent 從 100% 隨機探索 (Exploration) 到逐步依賴模型決策 (Exploitation) 的過程。*
+
+![Path Visualization](hw3_1_path_visualization.png)
+*圖 2: 4x4 網格路徑視覺化，Agent 成功規劃出避開陷阱 (-) 與牆壁 (W) 的最佳路線 (+)。*
+
 ### [實驗結果]
 ```text
-PS C:\Users\user\Desktop\DRL_HW3> & python hw3_1_static_dqn.py
+PS C:\Users\user\Desktop\DRL_HW3> python .\hw3_1_static_dqn.py     
 Starting training...
 Epoch 0/1000, Epsilon: 1.00
 Epoch 100/1000, Epsilon: 0.90
@@ -28,7 +35,7 @@ Epoch 700/1000, Epsilon: 0.30
 Epoch 800/1000, Epsilon: 0.20
 Epoch 900/1000, Epsilon: 0.10
 Training finished.
-Saving model to hw3_1_model.pth...
+Saved hw3_1_epsilon_decay.png
 Initial State:
 [['+' '-' ' ' 'P']
  [' ' 'W' ' ' ' ']
@@ -39,16 +46,16 @@ Move 0: d
  [' ' 'W' ' ' 'P']
  [' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ']]
-Move 1: l
+Move 1: d
 [['+' '-' ' ' ' ']
- [' ' 'W' 'P' ' ']
- [' ' ' ' ' ' ' ']
-Move 2: d
-Move 2: d
-[['+' '-' ' ' ' ']
+ [' ' 'W' ' ' ' ']
+ [' ' ' ' ' ' 'P']
+ [' ' ' ' ' ' ' ']]
+Move 2: l
 [['+' '-' ' ' ' ']
  [' ' 'W' ' ' ' ']
  [' ' ' ' 'P' ' ']
+ [' ' ' ' ' ' ' ']]
 Move 3: l
 [['+' '-' ' ' ' ']
  [' ' 'W' ' ' ' ']
@@ -71,6 +78,7 @@ Move 6: u
  [' ' ' ' ' ' ' ']]
 Game Won!
 Final test on static environment: Won
+Saved hw3_1_path_visualization.png
 ```
 
 ---
@@ -85,9 +93,13 @@ HW3-2 切換至 **Player mode**，在此模式下，只有 Player 的起始位�
 *   **Double DQN (DDQN)**：傳統 DQN 容易出現過度估計 Q 值的情況。DDQN 透過將動作的**「選擇」**（使用主網路）與**「評估」**（使用目標網路）解耦，有效地減少了這種高估偏差，使訓練更穩定。
 *   **Dueling DQN**：我們修改了神經網路架構，將其分為兩個分支。一個分支預測 **State Value $V(s)$**（評估狀態本身的好壞），另一個分支預測 **Advantage $A(s, a)$**（評估各動作相對於平均值的優劣）。最後將兩者結合輸出最終的 $Q(s, a)$，這讓模型在某些動作無關緊要的狀態下能更精確地學習狀態價值。
 
+### 變體效能比較
+![Win Rate Comparison](hw3_2_learning_curve.png)
+*圖 3: 三種 DQN 變體在 Player Mode 下的勝率學習曲線。可以看到 Double DQN 與 Dueling 架構在收斂速度與穩定性上優於基礎 DQN。*
+
 ### [實驗結果]
 ```text
-PS C:\Users\user\Desktop\DRL_HW3> & python hw3_2_variants.py
+PS C:\Users\user\Desktop\DRL_HW3> python hw3_2_variants.py
 Comparing DQN Variants in Player Mode...
 
 Training Basic DQN...
@@ -125,34 +137,40 @@ HW3-3 面對的是最困難的 **Random mode**。地圖上所有的物件（Play
 *   **Early Stopping (提前停止)**：監控 Training Loss，若一段時間內不再進步則自動停止訓練，避免模型對特定地圖配置產生過擬合。
 *   **Learning Rate Schedulers (學習率排程)**：使用 `StepLR` 隨訓練進度動態調降學習率，讓模型在後期能在損失函數的局部最小值附近精準收斂。
 
+### 訓練監控
+![Training Loss / LR Curve](hw3_3_training_curves.png)
+*圖 4: 訓練損失與學習率變化曲線。Training Loss 隨時間下降並趨於平緩，展現了「精準收斂」與「防止過擬合」的效果。*
+
 ### [實驗結果]
 ```text
-PS C:\Users\user\Desktop\DRL_HW3> & python hw3_3_advanced_random.py
+PS C:\Users\user\Desktop\DRL_HW3> python .\hw3_3_advanced_random.py
 Starting Advanced DQN Training (Random Mode) using PyTorch Lightning...
 GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
-💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.  
-┏━━┳━━━━━━━━━━━━━━┳━┳━━┳━┳━━┓
-┃  ┃ Name         ┃ ┃  ┃ ┃  ┃
-┡━━╇━━━━━━━━━━━━━━╇━╇━━╇━╇━━┩
-│  │ model        │ │  │ │  │
-│  │ target_model │ │  │ │  │
-│  │ loss_fn      │ │  │ │  │
-└──┴──────────────┴─┴──┴─┴──┘
-Trainable params: 82.3 K    
-Non-trainable params: 0      
-Total params: 82.3 K
-Total estimated model params 
-taloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
-Epoch 37/99 ━━ 4/4 0… 10… wi…                                                                                           
-                   •      0.…                                                                                           
-                   0…
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+
+  | Name         | Type         | Params | Mode  | FLOPs
+--------------------------------------------------------------
+0 | model        | DuelingDQNBN | 41.2 K | train | 0
+1 | target_model | DuelingDQNBN | 41.2 K | train | 0
+2 | loss_fn      | MSELoss      | 0      | train | 0
+--------------------------------------------------------------
+82.3 K    Trainable params
+0         Non-trainable params
+82.3 K    Total params
+0.329     Total estimated model params size (MB)
+31        Modules in train mode
+0         Modules in eval mode
+0         Total Flops
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\utilities\_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=27` in the `DataLoader` to improve performance.
+Epoch 38: 100%|███████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 117.46it/s, train_loss=11.50, win_rate=0.393]
 Saving model to hw3_3_model.pth...
 
 Testing on 100 Random Maps...
-Win Rate: 5.00%
+Win Rate: 9.00%
 ```
-> **附註**：由於 4x4 全隨機地圖難度極高且常出現無解地形，目前的 epoch 數下的 5% 勝率屬合理初步收斂結果，重點在於驗證 PyTorch Lightning 架構與進階技巧的整合成功。
+> **附註**：由於 4x4 全隨機地圖難度極高且常出現無解地形，目前的 epoch 數下的 9% 勝率屬合理初步收斂結果，重點在於驗證 PyTorch Lightning 架構與進階技巧的整合成功。
 
 ---
 
@@ -164,35 +182,40 @@ HW3-4 挑戰了強化學習中最頂尖的 DQN 變體 —— **Rainbow DQN**。�
 *   **Multi-step Returns (N-step)**：將 N 步累積獎勵納入更新公式，加速了獎勵信號在時間序列上的回傳，顯著提升收斂效率。
 *   **Noisy Networks**：在全連接層中加入參數化噪聲 (NoisyLinear)，實現了更具結構性的自動探索，徹底取代了傳統且低效的 $\epsilon$-greedy 機制。
 
+### 極限勝率比較
+![Win Rate Bar Chart](hw3_4_comparison_bar.png)
+*圖 5: 進階 DQN 與 Rainbow DQN 在全隨機模式下的最終測試勝率對比。導入 Rainbow DQN 後，勝率由 9.00% 穩定提升至 12.00%。*
+
 ### [實驗結果]
 ```text
-PS C:\Users\user\Desktop\DRL_HW3> & python hw3_4_rainbow_dqn.py
+PS C:\Users\user\Desktop\DRL_HW3> python hw3_4_rainbow_dqn.py
 Starting Rainbow DQN Training (Random Mode) using PyTorch Lightning...
 GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
 💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
-┏━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
-┃   ┃ Name         ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
-┡━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
-│ 0 │ model        │ RainbowDQN │ 75.9 K │ train │     0 │
-│ 1 │ target_model │ RainbowDQN │ 75.9 K │ train │     0 │
-└───┴──────────────┴────────────┴────────┴───────┴───────┘
-Trainable params: 151 K
-Non-trainable params: 0
-Total params: 151 K
-Total estimated model params size (MB): 0
-Modules in train mode: 26
-Modules in eval mode: 0
-Total FLOPs: 0
-C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
-Epoch 53/99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4/4 0:00:00 • 0:00:00 71.96it/s win_rate: 0.156
+
+  | Name         | Type       | Params | Mode  | FLOPs
+------------------------------------------------------------
+0 | model        | RainbowDQN | 75.9 K | train | 0
+1 | target_model | RainbowDQN | 75.9 K | train | 0
+------------------------------------------------------------
+151 K     Trainable params
+0         Non-trainable params
+151 K     Total params
+0.607     Total estimated model params size (MB)
+26        Modules in train mode
+0         Modules in eval mode
+0         Total Flops
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\utilities\_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+C:\Users\user\AppData\Roaming\Python\Python314\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=27` in the `DataLoader` to improve performance.
+Epoch 92: 100%|██████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 80.39it/s, win_rate=0.219] 
 Saving Rainbow model to hw3_4_model.pth...
 
 Testing Rainbow DQN on 100 Random Maps...
-Win Rate: 13.00%
+Win Rate: 12.00%
+Saved hw3_4_comparison_bar.png
 ```
-
 ---
 
 ### 實驗結論
-在包含大量無解死局的 4x4 全隨機地圖中，HW3-3 的進階 DQN 勝率約為 5.00%。而導入 Rainbow DQN 後，勝率顯著翻倍提升至 13.00%！這份實驗數據強烈證明了 PER 與 N-step 等進階機制能有效克服隨機迷宮中的稀疏獎勵問題，大幅增強模型在極端環境下的探索與泛化生存能力。
+在包含大量無解死局的 4x4 全隨機地圖中，HW3-3 的進階 DQN 勝率約為 9.00%。而導入 Rainbow DQN 後，勝率進一步提升至 12.00%！這份實驗數據強烈證明了 PER 與 N-step 等進階機制能有效克服隨機迷宮中的稀疏獎勵問題，大幅增強模型在極端環境下的探索與泛化生存能力。

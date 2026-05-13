@@ -1,4 +1,4 @@
-PS C:\Users\user\Downloads\DRL_HW3-main\DRL_HW3-main> & C:/Users/user/AppData/Local/Programs/Python/Python313/python.exe c:/Users/user/Downloads/DRL_HW3-main/DRL_HW3-main/HW3_Solutions/hw3_1_static_dqn.py
+PS C:\Users\user\Desktop\DRL_HW3> python .\hw3_1_static_dqn.py     
 Starting training...
 Epoch 0/1000, Epsilon: 1.00
 Epoch 100/1000, Epsilon: 0.90
@@ -11,7 +11,7 @@ Epoch 700/1000, Epsilon: 0.30
 Epoch 800/1000, Epsilon: 0.20
 Epoch 900/1000, Epsilon: 0.10
 Training finished.
-Saving model to HW3_Solutions/hw3_1_model.pth...
+Saved hw3_1_epsilon_decay.png
 Initial State:
 [['+' '-' ' ' 'P']
  [' ' 'W' ' ' ' ']
@@ -22,16 +22,16 @@ Move 0: d
  [' ' 'W' ' ' 'P']
  [' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ']]
-Move 1: l
+Move 1: d
 [['+' '-' ' ' ' ']
- [' ' 'W' 'P' ' ']
- [' ' ' ' ' ' ' ']
-Move 2: d
-Move 2: d
-[['+' '-' ' ' ' ']
+ [' ' 'W' ' ' ' ']
+ [' ' ' ' ' ' 'P']
+ [' ' ' ' ' ' ' ']]
+Move 2: l
 [['+' '-' ' ' ' ']
  [' ' 'W' ' ' ' ']
  [' ' ' ' 'P' ' ']
+ [' ' ' ' ' ' ' ']]
 Move 3: l
 [['+' '-' ' ' ' ']
  [' ' 'W' ' ' ' ']
@@ -54,3 +54,4 @@ Move 6: u
  [' ' ' ' ' ' ' ']]
 Game Won!
 Final test on static environment: Won
+Saved hw3_1_path_visualization.png
